@@ -1,0 +1,74 @@
+#include "stdafx.h"
+#include <iostream>
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
+
+int main()
+{
+	int row1, column1, row2, column2, elem;
+	vector<int>temprow;
+	vector<vector <int>>mat1, mat2, mat3;
+
+	cout << "Enter rows and columns of both matrices:\r\n";
+	cin >> row1 >> column1 >> row2 >> column2;
+	cout << "Enter elements rowwise:\r\n";
+	for (int j = 0;j < row1;j++)
+	{
+		for (int i = 0;i < column1;i++)
+		{
+			cin >> elem;
+			temprow.push_back(elem);
+		}
+		mat1.push_back(temprow);
+		temprow.clear();
+	}
+
+	for (int j = 0;j < row2;j++)
+	{
+		for (int i = 0;i < column2;i++)
+		{
+			cin >> elem;
+			temprow.push_back(elem);
+		}
+		mat2.push_back(temprow);
+		temprow.clear();
+	}
+
+	elem = 0;
+
+	if (column1 == row2)
+	{
+		for (int i = 0;i < row1;i++)
+		{
+			for (int j = 0;j < column1;j++)
+			{
+					for (int l = 0;l < row2;l++)
+					{
+						elem += (mat1[i][l] * mat2[l][j]);
+					}
+					temprow.push_back(elem);
+					elem = 0;
+			}
+			mat3.push_back(temprow);
+			temprow.clear();
+		}
+
+		for (vector<vector <int>>::iterator i = mat3.begin();i != mat3.end();++i)
+		{
+			for (vector<int>::iterator j = (*i).begin();j != (*i).end();++j)
+			{
+				cout << *j << " ";
+			}
+			cout << "\r\n";
+		}
+	}
+
+	else cout << "Multiplication is an invalid operation\r\n";
+
+	cout << endl;
+
+    return 0;
+}
