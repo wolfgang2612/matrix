@@ -1,0 +1,115 @@
+// RREF.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <vector>
+#include <iterator>
+#include <math.h>
+
+using namespace std;
+
+template <class X>
+void myswap(X &a, X &b) {
+	X temp;
+	temp = a;
+	a = b;
+	b = temp;
+}
+
+int main()
+{
+	int row, column,lastj=-1,parity=0;
+	bool ok;
+	float elem,temp,scale=1.0,det=1;
+	vector<float>temprow,temprow1;
+	vector<vector <float>>mat, pivot;
+	cin >> row >> column;
+	for (int j = 0;j < row;j++)
+	{
+		for (int i = 0;i < column;i++)
+		{
+			cin >> elem;
+			temprow.push_back(elem);
+			temprow1.push_back(0);
+		}
+		mat.push_back(temprow);
+		pivot.push_back(temprow1);
+		temprow.clear();
+		temprow1.clear();
+	}
+
+	for (int i = 0;i < row;i++)
+	{
+		for (int j = lastj+1;j < column;j++)
+		{
+			for (int k = i;k < row;k++)
+			{
+				ok = false;
+				if (mat[k][j] != 0)
+				{
+					for (int l = 0;l < column;l++)
+						myswap(mat[k][l], mat[i][l]);
+					parity++;
+					lastj = j;
+					pivot[i][lastj] = 1;
+					ok = true;
+					break;
+				}
+			}
+			if(ok)break;
+		}
+
+		for (int j = i + 1;j < row;j++)
+		{
+			temp = mat[j][lastj];
+			for (int k = lastj;k < column;k++)
+			{
+				if (lastj != -1 && temp != 0)
+				{
+					mat[j][k] -= temp * mat[i][k] / mat[i][lastj];
+				}
+			}
+		}
+
+		for (int j = row-1;j >= 0;j--)
+		{
+			for (int k = column-1;k >= 0;k--)
+			{
+				if (pivot[j][k] == 1)
+				{
+					temp = mat[j][k];
+					for (int l = 0;l < column;l++)
+						mat[j][l] /= temp;
+					scale *= temp;
+					for (int l = j - 1;l >= 0;l--)
+					{
+						temp = mat[l][k];
+						for (int z = 0;z < column;z++)
+							mat[l][z] -= temp * mat[j][z];
+					}
+				}
+			}
+		}
+	}
+
+	if (row == column)
+	{
+		for (int i = 0;i < row;i++)
+			det *= mat[i][i];
+		det *= scale*(pow((-1),parity));
+		cout << "Determinant is " << det << "\r\n";
+	}
+
+	for (vector<vector <float>>::iterator m = mat.begin();m != mat.end();++m)
+	{
+		for (vector<float>::iterator n = (*m).begin();n != (*m).end();++n)
+		{
+			cout << *n << " ";
+		}
+		cout << "\r\n";
+	}	
+	
+    return 0;
+}
+
